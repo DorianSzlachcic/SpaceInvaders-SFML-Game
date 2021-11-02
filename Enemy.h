@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <list>
+#include <memory>
 #include "Funcs.h"
 #include "Laser.h"
 #include "SoundManager.h"
