@@ -4,12 +4,15 @@ libFlag = -L/home/dorian/SFML/lib
 modulesFlag = -lsfml-window -lsfml-graphics -lsfml-system -lsfml-audio
 
 output: $(objects)
-	g++ $(libFlag) *.o -o output $(modulesFlag)
+	g++ $(libFlag) *.o -o SpaceInvaders $(modulesFlag)
 	cp -r ../textures .
 	cp -r ../sounds .
 
 $(objects): %.o: ../src/%.cpp
 	g++ $(includeFlag) -c $< -o $@
+
+run: output
+	./SpaceInvaders
 
 clean:
 	rm -rf *.o output textures sounds
