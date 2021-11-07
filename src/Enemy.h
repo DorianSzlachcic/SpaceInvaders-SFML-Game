@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <memory>
 #include <list>
 #include "Funcs.h"
 #include "Laser.h"
