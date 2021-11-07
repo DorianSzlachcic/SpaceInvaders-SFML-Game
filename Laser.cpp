@@ -6,10 +6,10 @@ Laser::Laser(sf::Vector2f direction, sf::Vector2f startingPosition, sf::RenderWi
 	if (texture.loadFromFile("textures/laser.png"))
 		sprite.setTexture(texture);
 
-	sprite.setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
+	sprite.setOrigin(static_cast<float>(texture.getSize().x) / 2, static_cast<float>(texture.getSize().y) / 2);
 	sprite.setPosition(position);
 
-	float angle = std::atan2(movingDirection.y, movingDirection.x) * (180.f / 3.14) + 90.f;
+	float angle = std::atan2(movingDirection.y, movingDirection.x) * (180.f / 3.14f) + 90.f;
 	sprite.setRotation(angle);
 
 	soundManager.playLaserSound();

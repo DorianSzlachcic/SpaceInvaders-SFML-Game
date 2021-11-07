@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
 #include <iostream>
+#include <memory>
 #include <list>
 
 #include "Player.h"
@@ -16,12 +16,17 @@
 const int WIDTH = 1000;
 const int HEIGHT = 700;
 
-template <typename T> void removeDestroyedObjects(std::list<T>& list);
+template <class T> void removeDestroyedObjects(std::list<std::shared_ptr<T>>& list);
 void generateEnemies(std::list<std::shared_ptr<Enemy>>& enemies, sf::RenderWindow& window, SoundManager& soundManager);
 
 int main()
 {
 	sf::RenderWindow window{ sf::VideoMode{WIDTH,HEIGHT}, "Space Invaders", sf::Style::Close };
+	sf::Image cursorImage;
+	sf::Cursor cursor;
+	if (cursorImage.loadFromFile("textures/cursor.png"))
+		cursor.loadFromPixels(cursorImage.getPixelsPtr(), cursorImage.getSize(), sf::Vector2u{ cursorImage.getSize().x/2, cursorImage.getSize().y/2});
+	window.setMouseCursor(cursor);
 
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
@@ -33,7 +38,7 @@ int main()
 	SoundManager soundManager;
 	soundManager.playMusic();
 
-	srand(time(0));
+	srand(unsigned(time(0)));
 	std::list<std::shared_ptr<Laser>> lasers;
 	std::unique_ptr<Player> player = std::make_unique<Player>( window, sf::Vector2f{WIDTH / 2,HEIGHT / 2}, lasers, soundManager );
 	std::list<std::shared_ptr<Enemy>> enemies;
@@ -98,10 +103,10 @@ int main()
 	return 0;
 }
 
-template <typename T> 
-void removeDestroyedObjects(std::list<T>& list)
+template <class T> 
+void removeDestroyedObjects(std::list<std::shared_ptr<T>>& list)
 {
-	std::list<T> toRemove;
+	std::list<std::shared_ptr<T>> toRemove;
 	for (auto& l : list)
 	{
 		if (l->isDestroyed())
@@ -115,7 +120,7 @@ void removeDestroyedObjects(std::list<T>& list)
 void generateEnemies(std::list<std::shared_ptr<Enemy>>& enemies, sf::RenderWindow& window, SoundManager& soundManager)
 {
 	static sf::Clock enemyGenerationTimer;
-	if (enemyGenerationTimer.getElapsedTime().asSeconds() >= 2)
+	if (enemyGenerationTimer.getElapsedTime().asSeconds() >= static_cast<float>(rand()%10+15)/10)
 	{
 		std::shared_ptr<Enemy> ptr;
 		switch (rand()%3+1)
@@ -129,8 +134,9 @@ void generateEnemies(std::list<std::shared_ptr<Enemy>>& enemies, sf::RenderWindo
 		case 3:
 			ptr = std::make_shared<SmallFastEnemy>(window, soundManager);
 			break;
+		default:
+			break;
 		}
-
 		enemies.push_back(ptr);
 		enemyGenerationTimer.restart();
 	}

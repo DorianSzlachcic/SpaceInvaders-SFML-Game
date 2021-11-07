@@ -15,22 +15,22 @@ void Enemy::draw() const
 	target.draw(sprite);
 }
 
-bool Enemy::isDestroyed()
+bool Enemy::isDestroyed() const
 {
 	return destroyed;
 }
 
-sf::Vector2f Enemy::getPosition()
+sf::Vector2f Enemy::getPosition() const
 {
 	return position;
 }
 
-sf::FloatRect Enemy::getGlobalBounds()
+sf::FloatRect Enemy::getGlobalBounds() const
 {
 	return sprite.getGlobalBounds();
 }
 
-void Enemy::handleCollisionsAndHealth(std::list<std::shared_ptr<Laser>>& lasers, int& health)
+void Enemy::handleCollisionsAndHealth(std::list<std::shared_ptr<Laser>>& lasers)
 {
 	for (auto& l : lasers)
 	{
@@ -47,14 +47,14 @@ void Enemy::handleCollisionsAndHealth(std::list<std::shared_ptr<Laser>>& lasers,
 	}
 }
 
-void Enemy::handleMoving(sf::Vector2f playerPosition, sf::Time deltaTime, const float SPEED)
+void Enemy::handleMoving(sf::Vector2f playerPosition, sf::Time deltaTime)
 {
 	sf::Vector2f vec = playerPosition - position;
 
-	position += vectorNormalize(vec) * SPEED * deltaTime.asSeconds();
+	position += vectorNormalize(vec) * speed * deltaTime.asSeconds();
 	sprite.setPosition(position);
 
-	float angle = std::atan2(vec.y, vec.x) * (180.f / 3.14) - 90.f;
+	float angle = std::atan2(vec.y, vec.x) * (180.f / 3.14f) - 90.f;
 	sprite.setRotation(angle);
 }
 
@@ -65,19 +65,21 @@ void Enemy::setRandomPosition()
 	switch (screenSide)
 	{
 	case 1:
-		position = sf::Vector2f{ -40, float(rand() % target.getSize().y) };
+		position = sf::Vector2f{ -40, static_cast<float>(rand() % target.getSize().y) };
 		break;
 	case 2:
-		position = sf::Vector2f{ float(rand() % target.getSize().x), -40 };
+		position = sf::Vector2f{ static_cast<float>(rand() % target.getSize().x), -40 };
 		break;
 	case 3:
-		position = sf::Vector2f{ float(target.getSize().x + 40), float(rand() % target.getSize().y) };
+		position = sf::Vector2f{ static_cast<float>(target.getSize().x + 40), static_cast<float>(rand() % target.getSize().y) };
 		break;
 	case 4:
-		position = sf::Vector2f{ float(rand() % target.getSize().x), float(target.getSize().y + 40) };
+		position = sf::Vector2f{ static_cast<float>(rand() % target.getSize().x), static_cast<float>(target.getSize().y + 40) };
+		break;
+	default:
 		break;
 	}
 
-	sprite.setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
+	sprite.setOrigin(static_cast<float>(texture.getSize().x) / 2, static_cast<float>(texture.getSize().y) / 2);
 	sprite.setPosition(position);
 }

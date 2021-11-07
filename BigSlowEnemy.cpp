@@ -3,6 +3,10 @@
 BigSlowEnemy::BigSlowEnemy(sf::RenderWindow& window, SoundManager& sounds)
 	: Enemy::Enemy(window, sounds)
 {
+	speed = 100.f;
+	health = 10;
+	filePath = "textures/enemy2.png";
+
 	if (texture.loadFromFile(filePath))
 		sprite.setTexture(texture);
 
@@ -15,6 +19,6 @@ BigSlowEnemy::~BigSlowEnemy()
 
 void BigSlowEnemy::logic(sf::Vector2f playerPosition, std::list<std::shared_ptr<Laser>>& lasers, sf::Time deltaTime)
 {
-	handleCollisionsAndHealth(lasers, health);
-	handleMoving(playerPosition, deltaTime, SPEED);
+	handleCollisionsAndHealth(lasers);
+	handleMoving(playerPosition, deltaTime);
 }

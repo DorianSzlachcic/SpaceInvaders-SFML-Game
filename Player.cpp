@@ -6,7 +6,7 @@ Player::Player(sf::RenderWindow& window, sf::Vector2f startingPosition, std::lis
 	if (texture.loadFromFile("textures/playerShip.png"))
 		sprite.setTexture(texture);
 
-	sprite.setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
+	sprite.setOrigin(static_cast<float>(texture.getSize().x) / 2, static_cast<float>(texture.getSize().y) / 2);
 	sprite.setPosition(position);
 }
 
@@ -96,13 +96,13 @@ void Player::aiming()
 	sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(target));
 	sf::Vector2f vec = mousePosition - sprite.getPosition();
 
-	float angle = std::atan2(vec.y, vec.x) * (180.f / 3.14) + 90.f;
+	float angle = std::atan2(vec.y, vec.x) * (180.f / 3.14f) + 90.f;
 	sprite.setRotation(angle);
 }
 
 void Player::moving(sf::Time delta)
 {
-	sf::Vector2f inputVector{ float(inputRight - inputLeft),float(inputDown - inputUp) };
+	sf::Vector2f inputVector{ static_cast<float>(inputRight - inputLeft),static_cast<float>(inputDown - inputUp) };
 	inputVector = vectorNormalize(inputVector);
 
 	if(vectorLength(velocity)<=MAX_SPEED)
