@@ -17,38 +17,13 @@ Player::~Player()
 
 void Player::input()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		inputLeft = 1;
-	}
-	else
-	{
-		inputLeft = 0;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		inputRight = 1;
-	}
-	else
-	{
-		inputRight = 0;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-	{
-		inputUp = 1;
-	}
-	else
-	{
-		inputUp = 0;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-	{
-		inputDown = 1;
-	}
-	else
-	{
-		inputDown = 0;
-	}
+	inputLeft = (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) ? 1 : 0;
+	
+	inputRight = (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) ? 1 : 0;
+
+	inputUp = (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) ? 1 : 0;
+
+	inputDown = (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)) ? 1 : 0;
 }
 
 void Player::logic(sf::Time delta)
@@ -84,7 +59,7 @@ void Player::shoot()
 	{
 		sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(target));
 		sf::Vector2f vec = mousePosition - sprite.getPosition();
-		std::shared_ptr<Laser> ptr = std::make_unique<Laser>(vectorNormalize(vec), sprite.getPosition(), target, soundManager);
+		std::shared_ptr<Laser> ptr = std::make_shared<Laser>(vectorNormalize(vec), sprite.getPosition(), target, soundManager);
 		lasers.push_back(ptr);
 
 		shootTimer.restart();
