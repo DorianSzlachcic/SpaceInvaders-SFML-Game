@@ -30,7 +30,7 @@ sf::FloatRect Enemy::getGlobalBounds() const
 	return sprite.getGlobalBounds();
 }
 
-void Enemy::handleCollisionsAndHealth(std::list<std::shared_ptr<Laser>>& lasers)
+void Enemy::handleCollisionsAndHealth(std::list<std::unique_ptr<Laser>>& lasers)
 {
 	for (auto& l : lasers)
 	{

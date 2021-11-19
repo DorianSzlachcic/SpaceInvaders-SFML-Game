@@ -17,7 +17,7 @@ BigSlowEnemy::~BigSlowEnemy()
 {
 }
 
-void BigSlowEnemy::logic(sf::Vector2f playerPosition, std::list<std::shared_ptr<Laser>>& lasers, sf::Time deltaTime)
+void BigSlowEnemy::logic(sf::Vector2f playerPosition, std::list<std::unique_ptr<Laser>>& lasers, sf::Time deltaTime)
 {
 	handleCollisionsAndHealth(lasers);
 	handleMoving(playerPosition, deltaTime);

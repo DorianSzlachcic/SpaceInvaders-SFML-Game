@@ -6,5 +6,5 @@ public:
 	BigSlowEnemy(sf::RenderWindow& window, SoundManager& sounds);
 	~BigSlowEnemy();
 
-	void logic(sf::Vector2f playerPosition, std::list<std::shared_ptr<Laser>>& lasers, sf::Time deltaTime) override;
+	void logic(sf::Vector2f playerPosition, std::list<std::unique_ptr<Laser>>& lasers, sf::Time deltaTime) override;
 };

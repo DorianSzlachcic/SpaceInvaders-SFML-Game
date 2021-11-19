@@ -16,8 +16,8 @@
 const int WIDTH = 1000;
 const int HEIGHT = 700;
 
-template <class T> void removeDestroyedObjects(std::list<std::shared_ptr<T>>& list);
-void generateEnemies(std::list<std::shared_ptr<Enemy>>& enemies, sf::RenderWindow& window, SoundManager& soundManager);
+template <class T> void removeDestroyedObjects(std::list<std::unique_ptr<T>>& list);
+void generateEnemies(std::list<std::unique_ptr<Enemy>>& enemies, sf::RenderWindow& window, SoundManager& soundManager);
 
 int main()
 {
@@ -39,9 +39,9 @@ int main()
 	soundManager.playMusic();
 
 	srand(unsigned(time(0)));
-	std::list<std::shared_ptr<Laser>> lasers;
+	std::list<std::unique_ptr<Laser>> lasers;
 	std::unique_ptr<Player> player = std::make_unique<Player>( window, sf::Vector2f{WIDTH / 2,HEIGHT / 2}, lasers, soundManager );
-	std::list<std::shared_ptr<Enemy>> enemies;
+	std::list<std::unique_ptr<Enemy>> enemies;
 	Points points{ window };
 
 	sf::Clock timer;
@@ -104,40 +104,38 @@ int main()
 }
 
 template <class T> 
-void removeDestroyedObjects(std::list<std::shared_ptr<T>>& list)
+void removeDestroyedObjects(std::list<std::unique_ptr<T>>& list)
 {
-	std::list<std::shared_ptr<T>> toRemove;
-	for (auto& l : list)
+	auto it = list.begin();
+	auto itEnd = list.end();
+	while (it != itEnd)
 	{
-		if (l->isDestroyed())
-			toRemove.push_back(l);
+		if ((*it)->isDestroyed())
+			it = list.erase(it);
+		else
+			it++;
 	}
-	if (!toRemove.empty())
-		for (auto& r : toRemove)
-			list.remove(r);
 }
 
-void generateEnemies(std::list<std::shared_ptr<Enemy>>& enemies, sf::RenderWindow& window, SoundManager& soundManager)
+void generateEnemies(std::list<std::unique_ptr<Enemy>>& enemies, sf::RenderWindow& window, SoundManager& soundManager)
 {
 	static sf::Clock enemyGenerationTimer;
 	if (enemyGenerationTimer.getElapsedTime().asSeconds() >= static_cast<float>(rand()%10+15)/10)
 	{
-		std::shared_ptr<Enemy> ptr;
 		switch (rand()%3+1)
 		{
 		case 1:
-			ptr = std::make_shared<NormalEnemy>(window, soundManager);
+			enemies.push_back(std::make_unique<NormalEnemy>(window, soundManager));
 			break;
 		case 2:
-			ptr = std::make_shared<BigSlowEnemy>(window, soundManager);
+			enemies.push_back(std::make_unique<BigSlowEnemy>(window, soundManager));
 			break;
 		case 3:
-			ptr = std::make_shared<SmallFastEnemy>(window, soundManager);
+			enemies.push_back(std::make_unique<SmallFastEnemy>(window, soundManager));
 			break;
 		default:
 			break;
 		}
-		enemies.push_back(ptr);
 		enemyGenerationTimer.restart();
 	}
 }

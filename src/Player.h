@@ -9,7 +9,7 @@
 class Player
 {
 public:
-	Player(sf::RenderWindow& window, sf::Vector2f startingPosition, std::list<std::shared_ptr<Laser>>& laserList, SoundManager& sounds);
+	Player(sf::RenderWindow& window, sf::Vector2f startingPosition, std::list<std::unique_ptr<Laser>>& laserList, SoundManager& sounds);
 	~Player();
 
 	void input();
@@ -24,7 +24,7 @@ private:
 	const float FRICTION = 300.f;
 	const float MAX_SPEED = 300.f;
 
-	std::list<std::shared_ptr<Laser>>& lasers;
+	std::list<std::unique_ptr<Laser>>& lasers;
 	sf::RenderWindow& target;
 	SoundManager& soundManager;
 	sf::Vector2f position;

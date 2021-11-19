@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(sf::RenderWindow& window, sf::Vector2f startingPosition, std::list<std::shared_ptr<Laser>>& laserList, SoundManager& sounds)
+Player::Player(sf::RenderWindow& window, sf::Vector2f startingPosition, std::list<std::unique_ptr<Laser>>& laserList, SoundManager& sounds)
 	: position(startingPosition), target(window), lasers(laserList), soundManager(sounds)
 {
 	if (texture.loadFromFile("textures/playerShip.png"))
@@ -59,8 +59,7 @@ void Player::shoot()
 	{
 		sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(target));
 		sf::Vector2f vec = mousePosition - sprite.getPosition();
-		std::shared_ptr<Laser> ptr = std::make_shared<Laser>(vectorNormalize(vec), sprite.getPosition(), target, soundManager);
-		lasers.push_back(ptr);
+		lasers.push_back(std::make_unique<Laser>(vectorNormalize(vec), sprite.getPosition(), target, soundManager));
 
 		shootTimer.restart();
 	}
