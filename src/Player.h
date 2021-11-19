@@ -21,8 +21,8 @@ public:
 
 private:
 	const float ACCELERATION = 2000.f;
-	const float FRICTION = 300.f;
-	const float MAX_SPEED = 300.f;
+	const float FRICTION = 500.f;
+	const float MAX_SPEED = 500.f;
 
 	std::list<std::unique_ptr<Laser>>& lasers;
 	sf::RenderWindow& target;

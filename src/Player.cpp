@@ -52,10 +52,10 @@ sf::FloatRect Player::getGlobalBounds()
 {
 	return sprite.getGlobalBounds();
 }
-
+ 
 void Player::shoot()
-{
-	if (shootTimer.getElapsedTime().asSeconds() >= 0.19)
+{ 
+	if (shootTimer.getElapsedTime().asSeconds() >= 0.15)
 	{
 		sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(target));
 		sf::Vector2f vec = mousePosition - sprite.getPosition();

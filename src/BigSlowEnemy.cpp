@@ -3,7 +3,7 @@
 BigSlowEnemy::BigSlowEnemy(sf::RenderWindow& window, SoundManager& sounds)
 	: Enemy::Enemy(window, sounds)
 {
-	speed = 100.f;
+	speed = 250.f;
 	health = 10;
 	filePath = "textures/enemy2.png";
 

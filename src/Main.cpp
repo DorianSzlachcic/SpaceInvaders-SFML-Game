@@ -13,8 +13,8 @@
 #include "Points.h"
 
 
-const int WIDTH = 1000;
-const int HEIGHT = 700;
+const int WIDTH = 1706;
+const int HEIGHT = 960;
 
 template <class T> void removeDestroyedObjects(std::list<std::unique_ptr<T>>& list);
 void generateEnemies(std::list<std::unique_ptr<Enemy>>& enemies, sf::RenderWindow& window, SoundManager& soundManager);
@@ -33,7 +33,6 @@ int main()
 	if (backgroundTexture.loadFromFile("textures/space.jpg"))
 		background.setTexture(backgroundTexture);
 	background.setScale(2, 2);
-	background.setPosition(-50, -50);
 
 	SoundManager soundManager;
 	soundManager.playMusic();
@@ -120,7 +119,7 @@ void removeDestroyedObjects(std::list<std::unique_ptr<T>>& list)
 void generateEnemies(std::list<std::unique_ptr<Enemy>>& enemies, sf::RenderWindow& window, SoundManager& soundManager)
 {
 	static sf::Clock enemyGenerationTimer;
-	if (enemyGenerationTimer.getElapsedTime().asSeconds() >= static_cast<float>(rand()%10+15)/10)
+	if (enemyGenerationTimer.getElapsedTime().asSeconds() >= static_cast<float>(rand()%10+12)/10)
 	{
 		switch (rand()%3+1)
 		{

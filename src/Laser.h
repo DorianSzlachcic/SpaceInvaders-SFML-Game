@@ -20,7 +20,7 @@ protected:
 	void setDestroyed();
 
 private:
-	const float SPEED = 1000.f;
+	const float SPEED = 1500.f;
 	bool destroyed = false;
 	sf::RenderWindow& target;
 	sf::Vector2f movingDirection;

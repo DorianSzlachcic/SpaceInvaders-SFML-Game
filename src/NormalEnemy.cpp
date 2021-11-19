@@ -3,7 +3,7 @@
 NormalEnemy::NormalEnemy(sf::RenderWindow& window, SoundManager& sounds)
 	: Enemy::Enemy(window, sounds)
 {
-	speed = 200.f;
+	speed = 350.f;
 	health = 5;
 	filePath = "textures/enemy1.png";
 	if (texture.loadFromFile(filePath))

@@ -3,7 +3,7 @@
 SmallFastEnemy::SmallFastEnemy(sf::RenderWindow& window, SoundManager& sounds)
 	: Enemy::Enemy(window, sounds)
 {
-	speed = 400.f;
+	speed = 550.f;
 	health = 2;
 	filePath = "textures/enemy3.png";
 
