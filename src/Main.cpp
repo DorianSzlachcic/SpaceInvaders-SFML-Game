@@ -1,140 +1,35 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <iostream>
-#include <memory>
-#include <list>
+#include <stack>
 
-#include "Player.h"
-#include "Laser.h"
-#include "BigSlowEnemy.h"
-#include "NormalEnemy.h"
-#include "SmallFastEnemy.h"
-#include "SoundManager.h"
-#include "Points.h"
+#include "SceneManager.h"
 
 
-const int WIDTH = 1706;
+const int WIDTH = 1700;
 const int HEIGHT = 960;
-
-template <class T> void removeDestroyedObjects(std::list<std::unique_ptr<T>>& list);
-void generateEnemies(std::list<std::unique_ptr<Enemy>>& enemies, sf::RenderWindow& window, SoundManager& soundManager);
 
 int main()
 {
 	sf::RenderWindow window{ sf::VideoMode{WIDTH,HEIGHT}, "Space Invaders", sf::Style::Close };
-	sf::Image cursorImage;
-	sf::Cursor cursor;
-	if (cursorImage.loadFromFile("textures/cursor.png"))
-		cursor.loadFromPixels(cursorImage.getPixelsPtr(), cursorImage.getSize(), sf::Vector2u{ cursorImage.getSize().x/2, cursorImage.getSize().y/2});
-	window.setMouseCursor(cursor);
-
-	sf::Texture backgroundTexture;
-	sf::Sprite background;
-	if (backgroundTexture.loadFromFile("textures/space.jpg"))
-		background.setTexture(backgroundTexture);
-	background.setScale(2, 2);
-
-	SoundManager soundManager;
-	soundManager.playMusic();
-
-	srand(unsigned(time(0)));
-	std::list<std::unique_ptr<Laser>> lasers;
-	std::unique_ptr<Player> player = std::make_unique<Player>( window, sf::Vector2f{WIDTH / 2,HEIGHT / 2}, lasers, soundManager );
-	std::list<std::unique_ptr<Enemy>> enemies;
-	Points points{ window };
-
-	sf::Clock timer;
-	while (window.isOpen())
+	SceneManager sceneManager{window};
+	while(window.isOpen())
 	{
 		sf::Event event;
-		bool restart = false;
-
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-
-			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::R)
-				restart = true;
-
-			player->input();
+				
+			sceneManager.input(event);
 		}
 
-		sf::Time deltaTime = timer.restart();
-		player->logic(deltaTime);
-
-		for (auto& e : enemies)
-		{
-			e->logic(player->getPosition(), lasers, deltaTime);
-
-			if (e->isDestroyed())
-				points.scoreUp();
-
-			if (player->getGlobalBounds().contains(e->getPosition()))
-			{
-				restart = true;
-			}
-		}
-
-		if (restart)
-		{
-			player = std::make_unique<Player>(window, sf::Vector2f{ WIDTH / 2,HEIGHT / 2 }, lasers, soundManager);
-			enemies.clear();
-			lasers.clear();
-			points.reset();
-		}
-
-		removeDestroyedObjects(lasers);
-		removeDestroyedObjects(enemies);
-		generateEnemies(enemies, window, soundManager);
+		sceneManager.logic();
 
 		window.clear(sf::Color::Black);
-		window.draw(background);
-		for (const auto& l : lasers)
-			l->draw();
-		for (const auto& e : enemies)
-			e->draw();
-		player->draw();
-		points.draw();
+		sceneManager.draw();
 		window.display();
 	}
 
 	return 0;
-}
-
-template <class T> 
-void removeDestroyedObjects(std::list<std::unique_ptr<T>>& list)
-{
-	auto it = list.begin();
-	auto itEnd = list.end();
-	while (it != itEnd)
-	{
-		if ((*it)->isDestroyed())
-			it = list.erase(it);
-		else
-			it++;
-	}
-}
-
-void generateEnemies(std::list<std::unique_ptr<Enemy>>& enemies, sf::RenderWindow& window, SoundManager& soundManager)
-{
-	static sf::Clock enemyGenerationTimer;
-	if (enemyGenerationTimer.getElapsedTime().asSeconds() >= static_cast<float>(rand()%10+12)/10)
-	{
-		switch (rand()%3+1)
-		{
-		case 1:
-			enemies.push_back(std::make_unique<NormalEnemy>(window, soundManager));
-			break;
-		case 2:
-			enemies.push_back(std::make_unique<BigSlowEnemy>(window, soundManager));
-			break;
-		case 3:
-			enemies.push_back(std::make_unique<SmallFastEnemy>(window, soundManager));
-			break;
-		default:
-			break;
-		}
-		enemyGenerationTimer.restart();
-	}
 }

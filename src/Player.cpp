@@ -28,6 +28,7 @@ void Player::input()
 
 void Player::logic(sf::Time delta)
 {
+	input();
 	moving(delta);
 	aiming();
 
